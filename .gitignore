@@ -1,3 +1,7 @@
 # directory
 DataBase/
 Log/
+
+# files
+
+*.result
