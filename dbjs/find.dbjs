@@ -1,0 +1,9 @@
+var db0 = db.getSiblingDB("test");
+var col0 = db0.getCollection( "col0" );
+
+var a = [];
+col0.find({}).limit( 30 ).forEach(function(d){
+	a.push( d );
+});
+
+printjson( a )

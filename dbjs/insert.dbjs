@@ -1,0 +1,20 @@
+var db0 = db.getSiblingDB("test");
+var col0 = db0.getCollection( "col0" );
+
+var _ta = {
+	_id : -1
+	, v : -1
+	, t :  null
+}
+var i = 0,iLen = 200, io;
+for(;i<iLen;++i){
+
+	var _ta0 = _ta;
+	_ta0._id = NumberInt( i )
+	_ta0.v = NumberInt( i )
+	_ta0.t = Date.now()
+	
+	col0.insert( _ta0 );
+}
+
+print( 1 );

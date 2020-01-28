@@ -1,0 +1,1 @@
+..\..\Binary\mongodb\4.0.15\bin\mongo --port 59320 -u tjrwns -p 123qweasdzxc --authenticationDatabase admin
