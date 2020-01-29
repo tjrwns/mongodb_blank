@@ -53,9 +53,8 @@ var ROUTER_DIRECTORY_PATH = ROOT_PATH + "\\..\\js\\";
 	var ROUTER_FILE_LIST = fs.readdirSync( ROUTER_DIRECTORY_PATH )
 	var i =0,iLen = ROUTER_FILE_LIST.length,io;
 	for(;i<iLen;++i){
-		io = ROUTER_FILE_LIST[ i ].split(".")[0];
+		//라우터를 등록한다;
 		eval( fs.readFileSync( ROUTER_DIRECTORY_PATH + ROUTER_FILE_LIST[ i ] ).toString() );
-		console.log( io );	
 	}
 })();
 //-------------------------;
