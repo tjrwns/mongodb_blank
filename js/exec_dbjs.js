@@ -1,4 +1,11 @@
+//-------------------------------------------------------;
+var fileNm = "js/exec_dbjs.js";
+if( console ) console.log( "[ S ] - " + fileNm + "----------" );
+//-------------------------------------------------------;
 (function(){
+//-------------------------------------------------------;
+// VARIABLE;
+//-------------------------------------------------------;
 
 var ROOT_PATH = process.cwd();
 
@@ -6,6 +13,15 @@ var CP_COMMAND = {};
 	CP_COMMAND.MONGO = ROOT_PATH + "\\..\\..\\..\\Binary\\mongodb\\4.0.15\\bin\\mongo";
 
 var DBJS_DIRECTORY_PATH = ROOT_PATH + "\\..\\dbjs\\";
+
+//-------------------------------------------------------;
+// FUNCTION;
+//-------------------------------------------------------;
+//-------------------------;
+//-------------------------;
+//-------------------------;
+//-------------------------;
+//-------------------------;
 
 /*
  * @function
@@ -15,18 +31,16 @@ var DBJS_DIRECTORY_PATH = ROOT_PATH + "\\..\\dbjs\\";
  */
 var exec_query_DB = function( dbjsNm, bResult ){
 	
-	var options = {	ID : "tjrwns", PWD : "123qweasdzxc", HOST : "localhost", PORT : 59320 };
-	
 	var DBJS_NM = dbjsNm + ".dbjs";
 	var FILE_PATH = DBJS_DIRECTORY_PATH + DBJS_NM;
 
 	var _t_command = CP_COMMAND.MONGO + " --username <!=ID=!> --password <!=PWD=!> --authenticationDatabase admin --host <!=HOST=!> --port <!=PORT=!> admin <!=FILE_PATH=!>";
 	if( bResult ) _t_command = _t_command + " > " + dbjsNm + "__" + Date.now() + ".result";
 	
-	var command = _t_command.replace( "<!=ID=!>", options.ID )
-		.replace( "<!=PWD=!>", options.PWD )
-		.replace( "<!=HOST=!>", options.HOST )
-		.replace( "<!=PORT=!>", options.PORT )
+	var command = _t_command.replace( "<!=ID=!>", global.CONST.MongoDB.OPTIONS.self.ID )
+		.replace( "<!=PWD=!>", global.CONST.MongoDB.OPTIONS.self.PWD )
+		.replace( "<!=HOST=!>", global.CONST.MongoDB.OPTIONS.self.HOST )
+		.replace( "<!=PORT=!>", global.CONST.MongoDB.OPTIONS.self.PORT )
 		.replace( "<!=FILE_PATH=!>", FILE_PATH );
 
 	var r = cp.execSync( command ).toString();
@@ -34,6 +48,11 @@ var exec_query_DB = function( dbjsNm, bResult ){
 	return r;
 };
 
+//-------------------------;
+//-------------------------;
+//-------------------------;
+//-------------------------;
+//-------------------------;
 /*
  * @function
  * @param {String} str
@@ -47,7 +66,11 @@ var deleteLines = function( str, n ){
 	//str = str.replace( /\r\n/g, '' );
 	return str;
 };
-
+//-------------------------;
+//-------------------------;
+//-------------------------;
+//-------------------------;
+//-------------------------;
 /*
  * @function
  * @param {String} url
@@ -67,17 +90,54 @@ var paramToObject = function( url ){
 	}
 
 	return o;
-}
+};
+//-------------------------;
+//-------------------------;
+//-------------------------;
+//-------------------------;
+//-------------------------;
 
-//ƒı∏ÆΩ««‡∂ÛøÏ≈Õ
-global.server.addRouter("/exec_dbjs",function( req, res ){
-	
-	var routerNm = req.url.split("?")[0];
-	var paramsO = paramToObject( req.url );
+//-------------------------------------------------------;
+// ROUTER;
+//-------------------------------------------------------;
+//-------------------------;
+//-------------------------;
+//-------------------------;
+//-------------------------;
+//-------------------------;
+	/**
+	 * ÏøºÎ¶¨ÌååÏùºÏùÑ Ïã§ÌñâÌïòÎäî ÎùºÏö∞ÌÑ∞
+	 * @function
+	 * @param {http.ClientRequest} req
+	 * <code>
+		{
 
-	console.log( routerNm + " - Exec Query dbjs --- " + paramsO.dbjs + ".dbjs --- " + Date.now() );
-	res.end( exec_query_DB( paramsO.dbjs ) )
-});
+		}
+	* </code>
+	*
+	* @param {http.ClientResponse} res
+	* <code>
+		{
 
+		}
+	* </code>
+	*
+	* @example
+	* <code>
+		http://localhost:8888/exec_dbjs?dbjs=getAlldbList
+	* </code>
+	*/
+	global.server.addRouter("/exec_dbjs",function( req, res ){
+		
+		var routerNm = req.url.split("?")[0];
+		var paramsO = paramToObject( req.url );
+
+		console.log( routerNm + " - Exec Query - " + paramsO.dbjs + ".dbjs - " + Date.now() );
+		res.end( exec_query_DB( paramsO.dbjs ) )
+
+	});
 })();
 
+//-------------------------------------------------------;
+if( console ) console.log( "[ E ] - " + fileNm + "----------" );
+//-------------------------------------------------------;
