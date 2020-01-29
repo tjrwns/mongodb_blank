@@ -51,7 +51,7 @@ global.CONST.MongoDB.OPTIONS = {
 var ROOT_PATH = process.cwd();
 var server_port = 8888;
 
-var ROUTER_DIRECTORY_PATH = ROOT_PATH + "\\..\\js\\";
+var ROUTER_DIRECTORY_PATH = ROOT_PATH + "\\js\\";
 
 (function(){
 	var ROUTER_FILE_LIST = fs.readdirSync( ROUTER_DIRECTORY_PATH );
