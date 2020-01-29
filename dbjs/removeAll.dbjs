@@ -1,0 +1,8 @@
+var db0 = db.getSiblingDB("test");
+var col0 = db0.getCollection( "col0" );
+
+col0.remove({});
+
+var result = { r : 0, m : "success" };
+
+printjson( result );

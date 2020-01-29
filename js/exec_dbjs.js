@@ -1,31 +1,39 @@
-//-------------------------------------------------------;
-// REQUIRE;
-//-------------------------------------------------------;
+(function(){
 
-var cp = require( "child_process" );
-var fs = require( "fs" );
+var ROOT_PATH = process.cwd();
 
-//-------------------------------------------------------;
-// VARIABLE;
-//-------------------------------------------------------;
+var CP_COMMAND = {};
+	CP_COMMAND.MONGO = ROOT_PATH + "\\..\\..\\..\\Binary\\mongodb\\4.0.15\\bin\\mongo";
 
-var options = {	ID : "tjrwns", PWD : "123qweasdzxc", HOST : "localhost", PORT : 59320 };
-var DBJS_DIRECTORY_PATH = "D:\\Github\\mongodb_sample\\dbjs\\";
-var DBJS_NM = "insert.dbjs";
-var FILE_PATH = DBJS_DIRECTORY_PATH + DBJS_NM;
 
-var _t_command = "..\\..\\..\\Binary\\mongodb\\4.0.15\\bin\\mongo --username <!=ID=!> --password <!=PWD=!> --authenticationDatabase admin --host <!=HOST=!> --port <!=PORT=!> admin <!=FILE_PATH=!>";
-//var _t_command = "..\\..\\..\\Binary\\mongodb\\4.0.15\\bin\\mongo --username <!=ID=!> --password <!=PWD=!> --authenticationDatabase admin --host <!=HOST=!> --port <!=PORT=!> admin <!=FILE_PATH=!> > test.result";
+var DBJS_DIRECTORY_PATH = ROOT_PATH + "\\..\\dbjs\\";
 
-var command = _t_command.replace( "<!=ID=!>", options.ID )
-	.replace( "<!=PWD=!>", options.PWD )
-	.replace( "<!=HOST=!>", options.HOST )
-	.replace( "<!=PORT=!>", options.PORT )
-	.replace( "<!=FILE_PATH=!>", FILE_PATH )
+/*
+ * @function
+ * @param {String} dbjsNm
+ * @param {boolean} bResult
+ * @return {String} r
+ */
+var exec_query_DB = function( dbjsNm, bResult ){
+	
+	var options = {	ID : "tjrwns", PWD : "123qweasdzxc", HOST : "localhost", PORT : 59320 };
+	
+	var DBJS_NM = dbjsNm + ".dbjs";
+	var FILE_PATH = DBJS_DIRECTORY_PATH + DBJS_NM;
 
-//-------------------------------------------------------;
-// FUNCTION;
-//-------------------------------------------------------;
+	var _t_command = CP_COMMAND.MONGO + " --username <!=ID=!> --password <!=PWD=!> --authenticationDatabase admin --host <!=HOST=!> --port <!=PORT=!> admin <!=FILE_PATH=!>";
+	if( bResult ) _t_command = _t_command + " > " + dbjsNm + "__" + Date.now() + ".result";
+	
+	var command = _t_command.replace( "<!=ID=!>", options.ID )
+		.replace( "<!=PWD=!>", options.PWD )
+		.replace( "<!=HOST=!>", options.HOST )
+		.replace( "<!=PORT=!>", options.PORT )
+		.replace( "<!=FILE_PATH=!>", FILE_PATH );
+
+	var r = cp.execSync( command ).toString();
+		r = deleteLines( r , 4 )
+	return r;
+};
 
 /*
  * @function
@@ -36,20 +44,41 @@ var command = _t_command.replace( "<!=ID=!>", options.ID )
 var deleteLines = function( str, n ){
 	var i = 0,iLen = n,io;
 	for(;i<iLen;++i){ str = str.slice(str.indexOf("\n") + 1, str.length ); }
-	str = str.replace( /\t/g, '' );
-	str = str.replace( /\r\n/g, '' );
+	//str = str.replace( /\t/g, '' );
+	//str = str.replace( /\r\n/g, '' );
 	return str;
 };
 
-/*/
-cp.exec( command , function(error, stdout, stderr){
-	if( error) throw error; 
-	console.log( deleteLines( stdout, 4 ) );
+/*
+ * @function
+ * @param {String} url
+ * @return {Object} o
+ */
+var paramToObject = function( url ){
+	
+	var r =  url.split("?")[ 1 ];
+	var a = r.split("=");
+	var o = {};
+	var i = 0,iLen = a.length,io;
+	
+	for(;i<iLen;++i){
+		io = a[ i ];
+		if( i % 2 == 0 ) o[ io ] = "";
+		else o[ a[ i - 1] ] = io;
+	}
+
+	return o;
+}
+
+//쿼리실행라우터
+global.server.addRouter("/exec_dbjs",function( req, res ){
+	
+	var routerNm = req.url.split("?")[0];
+	var paramsO = paramToObject( req.url );
+
+	console.log( routerNm + " - Exec Query dbjs --- " + paramsO.dbjs + ".dbjs --- " + Date.now() );
+	res.end( exec_query_DB( paramsO.dbjs ) )
 });
-/*/
-var a = cp.execSync( command ).toString();
-	a = deleteLines( a , 4 )
-//console.log( deleteLines( a ) )
-console.log( a )
-//*/
+
+})()
 
