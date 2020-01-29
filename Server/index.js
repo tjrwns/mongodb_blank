@@ -33,11 +33,11 @@ global.ROUTER_LIST = {};
 //-------------------------;
 
 
-global.CONST = {}
-global.CONST.MongoDB = {}
+global.CONST = {};
+global.CONST.MongoDB = {};
 global.CONST.MongoDB.OPTIONS = {
-	self : { ID : "tjrwns", PWD : "123qweasdzxc", HOST : "localhost", PORT : 59320 }	
-}
+	"self" : { ID : "tjrwns", PWD : "123qweasdzxc", HOST : "localhost", PORT : 59320 }	
+};
 
 //-------------------------;
 //-------------------------;
@@ -47,16 +47,10 @@ global.CONST.MongoDB.OPTIONS = {
 var ROOT_PATH = process.cwd();
 var server_port = 8888;
 
-var CP_COMMAND = {
-	MONGO : ROOT_PATH + "\\..\\..\\..\\Binary\\mongodb\\4.0.15\\bin\\mongo"
-};
-	
-var DBJS_DIRECTORY_PATH = ROOT_PATH + "\\..\\dbjs\\";
 var ROUTER_DIRECTORY_PATH = ROOT_PATH + "\\..\\js\\";
-var ROUTER_LIST;
 
 (function(){
-	ROUTER_FILE_LIST = fs.readdirSync( ROUTER_DIRECTORY_PATH )
+	var ROUTER_FILE_LIST = fs.readdirSync( ROUTER_DIRECTORY_PATH )
 	var i =0,iLen = ROUTER_FILE_LIST.length,io;
 	for(;i<iLen;++i){
 		io = ROUTER_FILE_LIST[ i ].split(".")[0];
@@ -89,7 +83,7 @@ global.server = http.createServer(function(req, res){
 	
 	if( req.url == "/" )
 	{
-		res.end( JSON.stringify( fs.readdirSync( DBJS_DIRECTORY_PATH ) ) )
+		res.end( JSON.stringify( fs.readdirSync( ROUTER_DIRECTORY_PATH ) ) )
 	}
 	else if( global.ROUTER_LIST[ routerNm ] )
 	{
