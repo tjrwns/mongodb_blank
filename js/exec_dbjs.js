@@ -5,7 +5,6 @@ var ROOT_PATH = process.cwd();
 var CP_COMMAND = {};
 	CP_COMMAND.MONGO = ROOT_PATH + "\\..\\..\\..\\Binary\\mongodb\\4.0.15\\bin\\mongo";
 
-
 var DBJS_DIRECTORY_PATH = ROOT_PATH + "\\..\\dbjs\\";
 
 /*
@@ -80,5 +79,5 @@ global.server.addRouter("/exec_dbjs",function( req, res ){
 	res.end( exec_query_DB( paramsO.dbjs ) )
 });
 
-})()
+})();
 
