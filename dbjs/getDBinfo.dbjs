@@ -1,0 +1,32 @@
+var dbs = db.adminCommand( { listDatabases: 1 } ).databases;
+
+var arr0 = [];
+dbs.forEach(function(d){
+	arr0.push( d.name )
+})
+
+var o = {};
+arr0.forEach(function(d){
+	o[ d ] = {};
+	var db0 = db.getSiblingDB( d );
+	db0.getCollectionNames().forEach(function( col ){
+		var colInfo = db0.getCollection( col ).stats();
+
+		o[ d ][ col ] = {
+			size : colInfo.size
+			, count : colInfo.count
+		};
+
+	})
+})
+
+var r = {
+	r : 0
+	, m : "sucess"
+	, d : {
+		dbInfo : dbs
+		, collectionInfo : o
+	}
+}
+
+printjson( r );
