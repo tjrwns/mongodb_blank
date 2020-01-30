@@ -4,6 +4,12 @@ if( console ) console.log( "[ S ] - " + fileNm + "----------" );
 //-------------------------------------------------------;
 (function(){
 //-------------------------------------------------------;
+// REQUIRE;
+//-------------------------------------------------------;
+
+var fs = require( "fs" );
+
+//-------------------------------------------------------;
 // VARIABLE;
 //-------------------------------------------------------;
 
@@ -132,8 +138,20 @@ var paramToObject = function( url ){
 		var routerNm = req.url.split("?")[0];
 		var paramsO = paramToObject( req.url );
 
-		console.log( routerNm + " - Exec Query - " + paramsO.dbjs + ".dbjs - " + Date.now() );
-		res.end( exec_query_DB( paramsO.dbjs ) )
+		var DBJS_NM = paramsO.dbjs + ".dbjs";
+		var FILE_PATH = DBJS_DIRECTORY_PATH + DBJS_NM;
+
+		if( fs.existsSync( FILE_PATH ) )
+		{
+			console.log( routerNm + " - Exec Query - " + paramsO.dbjs + ".dbjs - " + Date.now() );
+			res.end( exec_query_DB( paramsO.dbjs ) )	
+		}
+		else
+		{
+			console.log( routerNm + " - DBJS File Not Found! - " + paramsO.dbjs + ".dbjs - " + Date.now() );
+			res.end( "DBJS File Not Found!" )
+		}
+		
 
 	});
 })();
